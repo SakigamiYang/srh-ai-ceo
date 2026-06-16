@@ -6,13 +6,13 @@ AI CEO is a Retrieval-Augmented Generation (RAG) and multi-agent system that gat
 
 The project currently includes three data crawlers for collecting public business and financial information.
 
-- TOTAL: 100
+- TOTAL: 141
 
-| Source            | Type             | URL                                             | Description                                                                                                       |           Records |
-|-------------------|------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------:|
-| SAP News Blog     | official news    | https://news.microsoft.com/source/              | Crawls SAP official blog posts, including title, author, publication date, and full article content.              |            **60** |
-| ERP Today News    | industry news    | https://erp.today/category/erp-news/            | Crawls ERP Today News articles news, including title, author, publication date, and full article content.         |            **31** |
-| Trading Economics | customer reviews | https://tradingeconomics.com/united-states/news | Crawls financial and macroeconomic news from Trading Economics, including market updates and economic indicators. |            **50** |
+| Source         | Type             | URL                                             | Description                                                                                                       |           Records |
+|----------------|------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------:|
+| SAP News Blog  | official news    | https://news.microsoft.com/source/              | Crawls SAP official blog posts, including title, author, publication date, and full article content.              |            **60** |
+| ERP Today News | industry news    | https://erp.today/category/erp-news/            | Crawls ERP Today News articles news, including title, author, publication date, and full article content.         |            **31** |
+| Trust Radius   | customer reviews | https://www.trustradius.com/products/sap-analytics-cloud/reviews/all | Crawls TrustRadius reviews for SAP Analytics Cloud, including review title, reviewer name, publication date, rating, pros, and cons. |            **50** |
 
 ### Notes
 

@@ -163,7 +163,7 @@ def crawl_sap_news() -> None:
 
         if response.status_code == 404:
             logger.info(
-                "Received 404 on page {}. Stop crawling.",
+                "Received 404. Stop crawling.",
             )
             return
 
@@ -176,7 +176,7 @@ def crawl_sap_news() -> None:
 
         if not posts:
             logger.warning(
-                "No posts found on page {}.",
+                "No posts found.",
             )
             return
 
@@ -229,13 +229,13 @@ def crawl_sap_news() -> None:
 
                 except Exception:
                     logger.exception(
-                        "Failed to process article on page {}.",
+                        "Failed to process article.",
                     )
 
 
     except Exception:
         logger.exception(
-            "Failed to process list page {}.",
+            "Failed to process list.",
         )
 
 
