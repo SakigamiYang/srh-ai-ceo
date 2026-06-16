@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg18-trixie
+    container_name: ai-ceo-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ai_ceo}
+
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      - ${POSTGRES_DATA_ROOT}/postgres:/var/lib/postgresql
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-ai_ceo}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  chroma:
+    image: chromadb/chroma:1.5.10.dev125
+    container_name: ai-ceo-chroma
+    restart: unless-stopped
+
+    environment:
+      IS_PERSISTENT: ${CHROMA_IS_PERSISTENT:-TRUE}
+      ANONYMIZED_TELEMETRY: ${CHROMA_ANONYMIZED_TELEMETRY:-FALSE}
+
+      CHROMA_SERVER_HOST: 0.0.0.0
+      CHROMA_SERVER_HTTP_PORT: 8000
+
+    ports:
+      - "${CHROMA_PORT:-8000}:8000"
+
+    volumes:
+      - ${CHROMA_DATA_ROOT}/chroma:/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/api/v2/heartbeat >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default:
+    name: ai-ceo-network
