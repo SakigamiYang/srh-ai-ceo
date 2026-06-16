@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from loguru import logger
 from requests import RequestException
 from sqlalchemy import create_engine, text
-from constants import PROJECT_ROOT
 
 BASE_URL = "https://news.sap.com/blog/page/{page}/"
 
@@ -145,8 +144,9 @@ def crawl_sap_news() -> None:
     session.headers.update(HEADERS)
 
     page = 1
+    end_page = 20
 
-    while True:
+    while page <= end_page:
         page_url = BASE_URL.format(page=page)
 
         logger.info(
