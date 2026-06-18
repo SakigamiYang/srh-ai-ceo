@@ -33,3 +33,7 @@ Thumbs.db
 # data
 data/db/*
 !data/db/.gitkeep
+
+# model
+models/*
+!models/.gitkeep
