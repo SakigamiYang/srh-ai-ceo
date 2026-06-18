@@ -6,9 +6,12 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "beautifulsoup4>=4.15.0",
+    "chromadb>=1.5.9",
     "loguru>=0.7.3",
     "openai>=2.43.0",
     "psycopg[binary]>=3.3.4",
+    "rank-bm25>=0.2.2",
     "requests>=2.34.2",
+    "sentence-transformers>=5.6.0",
     "sqlalchemy>=2.0.51",
 ]
