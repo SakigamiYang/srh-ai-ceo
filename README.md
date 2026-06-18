@@ -21,3 +21,13 @@ The project currently includes three data crawlers for collecting public busines
 * Network requests include retry handling and delays between requests to improve robustness.
 * Article content is extracted from the corresponding web pages whenever applicable.
 * The crawler framework is designed to be easily extended with additional news and blog sources.
+
+## Data Processing Pipeline
+
+Transforms raw data (`sap_news_blog`, `erp_today_news`, `trustradius_sap_reviews`) into two layers:
+
+- **documents**: normalized news/blog content for retrieval (title + body, deduplicated via hash)
+- **reviews**: atomic user feedback (split pros/cons → one row per sentence, with sentiment)
+
+Each review item is further classified by a local LLM (`gemma-4-12b-it-qat`) into predefined tags (e.g., Cost, Performance), converting unstructured feedback into structured signals for downstream analysis and decision-making.
+
