@@ -11,13 +11,18 @@ def fetch_documents_by_chunk_ids(chunk_ids):
     with engine.begin() as conn:
 
         rows = conn.execute(text("""
-            SELECT DISTINCT d.*
+            SELECT DISTINCT d.*, c.content
             FROM document_chunks c
             JOIN documents d ON c.document_id = d.id
             WHERE c.id = ANY(:ids)
         """), {"ids": chunk_ids}).mappings()
 
-        return [dict(r) for r in rows]
+        results = []
+        for r in rows:
+            d = dict(r)
+            del d["body"]
+            results.append(r)
+        return results
 
 
 def fetch_reviews_by_ids(review_ids):
