@@ -2,6 +2,8 @@
 
 AI CEO is a Retrieval-Augmented Generation (RAG) and multi-agent system that gathers information from public business and financial sources to support intelligent analysis and decision making. It combines web crawlers, PostgreSQL, vector search, and large language models to build an extensible knowledge base for strategic insights.
 
+---
+
 ## Crawlers
 
 The project currently includes three data crawlers for collecting public business and financial information.
@@ -22,12 +24,77 @@ The project currently includes three data crawlers for collecting public busines
 * Article content is extracted from the corresponding web pages whenever applicable.
 * The crawler framework is designed to be easily extended with additional news and blog sources.
 
-## Data Processing Pipeline
+---
 
-Transforms raw data (`sap_news_blog`, `erp_today_news`, `trustradius_sap_reviews`) into two layers:
+## System Architecture
 
-- **documents**: normalized news/blog content for retrieval (title + body, deduplicated via hash)
-- **reviews**: atomic user feedback (split pros/cons → one row per sentence, with sentiment)
+The system follows a layered architecture:
 
-Each review item is further classified by a local LLM (`gemma-4-12b-it-qat`) into predefined tags (e.g., Cost, Performance), converting unstructured feedback into structured signals for downstream analysis and decision-making.
+- Presentation Layer: Streamlit dashboard
+- Orchestration Layer: LangGraph agent
+- Retrieval Layer: Hybrid search (BM25 + vector)
+- Data Layer: PostgreSQL and Chroma
 
+![aiceo-system-architecture.png](docs/images/aiceo-system-architecture.png)
+
+---
+
+## Data Flow
+
+![aiceo-data-flow.png](docs/images/aiceo-data-flow.png)
+
+---
+
+## Technology Stack
+
+Frontend:
+- Streamlit
+
+Backend:
+- Python
+- LangGraph (Agent Orchestration)
+
+Retrieval:
+- BM25 (Gensim)
+- Vector Search (ChromaDB)
+
+Database:
+- PostgreSQL
+
+ML / AI:
+- SentenceTransformers (Embedding)
+- Local LLM (Gemma via OpenAI API)
+
+Infrastructure:
+- Docker (PostgreSQL, Chroma)
+
+---
+
+## Design Decisions
+
+1. Hybrid Retrieval (BM25 + Vector)
+   - Combines lexical and semantic search
+   - Improves recall and precision
+
+2. Separation of Documents and Reviews
+   - Documents: factual information
+   - Reviews: user sentiment
+   - Enables balanced decision-making
+
+3. LangGraph-based Pipeline
+   - Provides modular and interpretable reasoning
+   - Ensures deterministic execution flow
+
+4. Local LLM Deployment
+   - Reduces latency and dependency on external APIs
+   - Enables full control over inference
+
+5. Chunking Strategy
+   - Improves retrieval granularity
+   - Enhances embedding quality
+
+---
+
+## AI Pipeline
+
+![aiceo-ai-pipeline.png](docs/images/aiceo-ai-pipeline.png)
