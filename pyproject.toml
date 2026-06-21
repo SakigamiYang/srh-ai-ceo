@@ -10,6 +10,7 @@ dependencies = [
     "langgraph>=1.2.6",
     "loguru>=0.7.3",
     "openai>=2.43.0",
+    "orjson>=3.11.9",
     "psycopg[binary]>=3.3.4",
     "rank-bm25>=0.2.2",
     "requests>=2.34.2",

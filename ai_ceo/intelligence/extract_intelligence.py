@@ -1,13 +1,4 @@
-import json
-from openai import OpenAI
-from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam
-
-MODEL = "gemma-4-12b-it-qat"
-
-client = OpenAI(
-    base_url="http://localhost:20000/v1",
-    api_key="dummy"
-)
+from ai_ceo.llm import llm_chat
 
 
 def build_documents_summary(documents):
@@ -67,23 +58,11 @@ Return JSON:
 }}
 """
 
-    resp = client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            ChatCompletionSystemMessageParam(content="You are a business analyst.", role="system"),
-            ChatCompletionUserMessageParam(content=prompt, role="user"),
-        ],
-    )
-
-    content = resp.choices[0].message.content.strip()
-
-    content = content.replace("```json", "").replace("```", "").strip()
-
-    try:
-        return json.loads(content)
-    except:
-        return {
+    result = llm_chat(system_prompt="You are a business analyst.", user_prompt=prompt)
+    if not result:
+        result = {
             "opportunities": [],
             "risks": [],
             "trends": []
         }
+    return result

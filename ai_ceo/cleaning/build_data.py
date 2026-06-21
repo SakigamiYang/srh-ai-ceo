@@ -1,25 +1,18 @@
 import hashlib
-import json
+import orjson
 import re
 import unicodedata
 
 from loguru import logger
-from openai import OpenAI
-from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam
 from sqlalchemy import create_engine, text
 
+from ai_ceo.llm import llm_chat
 
 DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ai_ceo"
-MODEL = "gemma-4-12b-it-qat"
 
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-)
-
-client = OpenAI(
-    base_url="http://localhost:20000/v1",
-    api_key="dummy",  # local model, not used
 )
 
 
@@ -86,28 +79,11 @@ Format:
 def classify(text_input: str) -> list[str]:
     """Call local LLM to classify tags."""
 
-    response = client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            ChatCompletionSystemMessageParam(content=SYSTEM_PROMPT, role="system"),
-            ChatCompletionUserMessageParam(content=f'Text: "{text_input}"', role="user"),
-        ],
-        temperature=0.0,
-    )
-
-    content = response.choices[0].message.content
-
-    if "```json" in content:
-        content = content.replace("```json", "")
-    if "```" in content:
-        content = content.replace("```", "")
-
-    try:
-        data = json.loads(content) if content else {}
-        return data.get("tags", [])
-    except Exception:
-        logger.warning("Bad JSON: {}", content)
+    result = llm_chat(system_prompt=SYSTEM_PROMPT, user_prompt=f'Text: "{text_input}"')
+    if not result:
         return []
+
+    return result.get("tags", [])
 
 
 # ---------- utils ----------
@@ -151,9 +127,9 @@ def build_documents(conn):
             "author": r["author"],
             "published_at": r["published_at"],
             "content_hash": build_hash(r["title"], body),
-            "metadata": json.dumps({
+            "metadata": orjson.dumps({
                 "page": r["page_number"]
-            })
+            }).decode("utf_8", errors="ignore")
         })
 
     logger.info("sap_news_blog done")
@@ -181,7 +157,7 @@ def build_documents(conn):
             "author": r["author"],
             "published_at": r["published_at"],
             "content_hash": build_hash(r["title"], body),
-            "metadata": json.dumps({})
+            "metadata": orjson.dumps({}).decode("utf_8", errors="ignore")
         })
 
     logger.info("erp_today_news done")

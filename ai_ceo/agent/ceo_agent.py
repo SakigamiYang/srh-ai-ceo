@@ -1,13 +1,4 @@
-import json
-from openai import OpenAI
-from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam
-
-MODEL = "gemma-4-12b-it-qat"
-
-client = OpenAI(
-    base_url="http://localhost:20000/v1",
-    api_key="dummy"
-)
+from ai_ceo.llm import llm_chat
 
 
 def ceo_decision(intelligence: dict) -> dict:
@@ -54,23 +45,11 @@ Return STRICT JSON:
   "justification": ""
 }}
 """
-
-    resp = client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            ChatCompletionSystemMessageParam(content="You are a strategic CEO.", role="system"),
-            ChatCompletionUserMessageParam(content=prompt, role="user"),
-        ],
-    )
-
-    content = resp.choices[0].message.content.strip()
-    content = content.replace("```json", "").replace("```", "").strip()
-
-    try:
-        return json.loads(content)
-    except Exception:
-        return {
+    result = llm_chat(system_prompt="You are a strategic CEO.", user_prompt=prompt)
+    if not result:
+        result = {
             "priorities": [],
             "actions": [],
-            "justification": content
+            "justification": ""
         }
+    return result
