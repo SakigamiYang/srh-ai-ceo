@@ -1,6 +1,6 @@
 import pickle
 
-from constants import PROJECT_ROOT
+from ai_ceo.constants import PROJECT_ROOT
 
 __all__ = ["load_bm25"]
 

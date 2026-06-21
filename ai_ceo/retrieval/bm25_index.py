@@ -4,7 +4,7 @@ from loguru import logger
 from rank_bm25 import BM25Okapi
 from sqlalchemy import create_engine, text
 
-from constants import PROJECT_ROOT
+from ai_ceo.constants import PROJECT_ROOT
 
 
 DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ai_ceo"

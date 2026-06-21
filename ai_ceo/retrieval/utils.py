@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from constants import PROJECT_ROOT
+from ai_ceo.constants import PROJECT_ROOT
 
 __all__ = ["encode_query", "encode_document"]
 
