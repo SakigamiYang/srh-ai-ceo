@@ -4,6 +4,75 @@ AI CEO is a Retrieval-Augmented Generation (RAG) and multi-agent system that gat
 
 ---
 
+## How to run the system
+
+### Start Infrastructure Services
+
+Start PostgreSQL and ChromaDB using Docker:
+
+docker compose up -d
+
+Ensure both services are running:
+
+- PostgreSQL on port 5432
+- ChromaDB on port 8000
+
+### Prepare Databases
+
+Run the SQL scripts:
+
+- sql/migrations/001_create_sap_news_blog.sql
+- sql/migrations/002_create_erp_today_news.sql
+- sql/migrations/003_create_trustradius_sap_reviews.sql
+- sql/migrations/004_create_documents.sql
+- sql/migrations/005_create_reviews.sql
+- sql/migrations/006_create_document_chunks.sql
+
+### Prepare Data (if not already done)
+
+Run the data processing pipeline:
+
+- python ai_ceo/crawler/crawl_sap_news_blog.py
+- python ai_ceo/crawler/crawl_erp_today_news.py
+- python ai_ceo/crawler/crawl_trustradius_sap_reviews.py
+
+Run the data processing pipeline:
+
+- python ai_ceo/cleaning/build_data.py
+
+(Data can also be restored by scripts in sql/data_backup)
+
+Then generate embeddings:
+
+- python ai_ceo/retrieval/embed_documents.py
+- python ai_ceo/retrieval/embed_reviews.py
+
+### Start the Dashboard
+
+Run the Streamlit application:
+
+./startup.sh
+
+### Access the Dashboard
+
+Open your browser and go to:
+
+- http://localhost:8501
+
+### Run Analysis
+Enter a query in the sidebar (e.g., "SAP AI strategy")
+
+Click Run Analysis
+
+Navigate through the dashboard tabs to explore:
+
+- Market intelligence
+- Opportunities & risks
+- Sentiment analysis
+- Strategic recommendations
+
+---
+
 ## Crawlers
 
 The project currently includes three data crawlers for collecting public business and financial information.
