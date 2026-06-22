@@ -17,6 +17,10 @@ Ensure both services are running:
 - PostgreSQL on port 5432
 - ChromaDB on port 8000
 
+### Start LLM Service
+
+Start LLM by LM Studio on port 20000
+
 ### Prepare Databases
 
 Run the SQL scripts:
