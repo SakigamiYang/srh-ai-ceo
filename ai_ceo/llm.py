@@ -7,7 +7,7 @@ from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUs
 
 __all__ = ["llm_chat"]
 
-MODEL = "gemma-4-12b-it-qat"
+MODEL = "minicpm-o-4_5"
 
 client = OpenAI(
     base_url="http://localhost:20000/v1",
@@ -26,6 +26,12 @@ def llm_chat(system_prompt: str, user_prompt: str) -> Optional[Dict[str, Any]]:
             reasoning_effort="none",
         )
         content = resp.choices[0].message.content.strip()
+
+        logger.debug("-" * 80)
+        logger.debug(f"{system_prompt = !r}")
+        logger.debug(f"{user_prompt = !r}")
+        logger.debug(f"{content = !r}")
+
         content = content.replace("```json", "").replace("```", "")
         return orjson.loads(content)
     except Exception as e:

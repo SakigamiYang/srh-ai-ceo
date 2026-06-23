@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 from collections import Counter
+from loguru import logger
 from sqlalchemy import create_engine, text
 
 from ai_ceo.agent.graph import run_ceo_agent
@@ -97,6 +98,11 @@ documents = res["documents"]
 reviews = res["reviews"]
 intelligence = res["intelligence"]
 decision = res["decision"]
+
+logger.debug(f"{documents = !r}")
+logger.debug(f"{reviews = !r}")
+logger.debug(f"{intelligence = !r}")
+logger.debug(f"{decision = !r}")
 
 
 # =========================
@@ -213,10 +219,13 @@ with tabs[6]:
     st.subheader("Executive Summary")
 
     st.write("### What happened?")
-    st.write(intelligence.get("trends", []))
+    for item in intelligence.get("trends", []):
+        st.write(f"- {item}")
 
     st.write("### Why does it matter?")
-    st.write(intelligence.get("risks", []))
+    for item in intelligence.get("risks", []):
+        st.write(f"- {item}")
 
     st.write("### What should management do next?")
-    st.write(decision.get("actions", []))
+    for item in intelligence.get("opportunities", []):
+        st.write(f"- {item}")
