@@ -73,7 +73,8 @@ with tabs[0]:
 
     st.header("Company Overview")
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2 = st.columns(2)
+    col3, col4 = st.columns(2)
 
     col1.metric("Company", "SAP")
     col2.metric("Industry", "ERP / Enterprise Software")
