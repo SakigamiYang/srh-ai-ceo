@@ -228,7 +228,7 @@ def build_reviews(conn):
 
 def main():
     with engine.begin() as conn:
-        build_documents(conn)
+        # build_documents(conn)
         build_reviews(conn)
 
     logger.info("ALL DONE")

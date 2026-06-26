@@ -18,10 +18,13 @@ def fetch_documents_by_chunk_ids(chunk_ids):
         """), {"ids": chunk_ids}).mappings()
 
         results = []
+        ids = []
         for r in rows:
             d = dict(r)
-            del d["body"]
-            results.append(r)
+            if d["id"] not in ids:
+                ids.append(d["id"])
+                d.pop("body")
+                results.append(d)
         return results
 
 
@@ -73,7 +76,10 @@ def hybrid_search(
         reverse=True
     )[:top_k]
 
-    chunk_ids = [cid for cid, _ in ranked_chunks]
+    chunk_ids = []
+    for cid, _ in ranked_chunks:
+        if not cid in chunk_ids:
+            chunk_ids.append(cid)
 
     documents = fetch_documents_by_chunk_ids(chunk_ids)
 

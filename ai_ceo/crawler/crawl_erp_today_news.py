@@ -142,7 +142,7 @@ def extract_article(
     return author, published_at, content
 
 
-def crawl_sap_news() -> None:
+def crawl_erp_today_news() -> None:
     """Crawl SAP News blog pages."""
 
     session = requests.Session()
@@ -240,4 +240,4 @@ def crawl_sap_news() -> None:
 
 
 if __name__ == "__main__":
-    crawl_sap_news()
+    crawl_erp_today_news()

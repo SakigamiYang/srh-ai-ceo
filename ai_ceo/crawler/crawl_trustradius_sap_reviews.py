@@ -8,7 +8,7 @@ from loguru import logger
 from requests import RequestException
 from sqlalchemy import create_engine, text
 
-BASE_URL = "http://www.trustradius.com/products/sap-analytics-cloud/reviews/all?page={page}"
+BASE_URL = "https://www.trustradius.com/products/sap-analytics-cloud/reviews/all?page={page}"
 
 HEADERS = {
     "User-Agent": (
@@ -16,8 +16,12 @@ HEADERS = {
         "(Macintosh; Intel Mac OS X 10_15_7) "
         "AppleWebKit/537.36 "
         "(KHTML, like Gecko) "
-        "Chrome/137.0 Safari/537.36"
-    )
+        "Chrome/149.0.0.0 Safari/537.36"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.trustradius.com/",
+    "Connection": "keep-alive",
 }
 
 DATABASE_URL = (
@@ -106,7 +110,7 @@ def get_with_retry(
     raise last_exception
 
 
-def crawl_sap_news() -> None:
+def crawl_trustradius_reviews() -> None:
     """Crawl SAP News blog pages."""
 
     session = requests.Session()
@@ -196,7 +200,7 @@ def crawl_sap_news() -> None:
                             pros_ul = pros_header.find_next("ul")
                             if pros_ul:
                                 pros_items = [
-                                    span.get_text(" ", strip=True)
+                                    "Pros: " + span.get_text(" ", strip=True)
                                     for span in pros_ul.select("li span")
                                     if span.get_text(" ", strip=True)
                                 ]
@@ -207,7 +211,7 @@ def crawl_sap_news() -> None:
                             cons_ul = cons_header.find_next("ul")
                             if cons_ul:
                                 cons_items = [
-                                    span.get_text(" ", strip=True)
+                                    "Cons: " + span.get_text(" ", strip=True)
                                     for span in cons_ul.select("li span")
                                     if span.get_text(" ", strip=True)
                                 ]
@@ -251,4 +255,4 @@ def crawl_sap_news() -> None:
 
 
 if __name__ == "__main__":
-    crawl_sap_news()
+    crawl_trustradius_reviews()

@@ -83,11 +83,11 @@ The project currently includes three data crawlers for collecting public busines
 
 - TOTAL: 141
 
-| Source         | Type             | URL                                             | Description                                                                                                       |           Records |
-|----------------|------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|------------------:|
-| SAP News Blog  | official news    | https://news.microsoft.com/source/              | Crawls SAP official blog posts, including title, author, publication date, and full article content.              |            **60** |
-| ERP Today News | industry news    | https://erp.today/category/erp-news/            | Crawls ERP Today News articles news, including title, author, publication date, and full article content.         |            **31** |
-| Trust Radius   | customer reviews | https://www.trustradius.com/products/sap-analytics-cloud/reviews/all | Crawls TrustRadius reviews for SAP Analytics Cloud, including review title, reviewer name, publication date, rating, pros, and cons. |            **50** |
+| Source         | Type             | URL                                                                  | Description                                                                                                                          | Records |
+|----------------|------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------:|
+| SAP News Blog  | official news    | https://news.microsoft.com/source/                                   | Crawls SAP official blog posts, including title, author, publication date, and full article content.                                 |  **60** |
+| ERP Today News | industry news    | https://erp.today/category/erp-news/                                 | Crawls ERP Today News articles news, including title, author, publication date, and full article content.                            |  **31** |
+| Trust Radius   | customer reviews | https://www.trustradius.com/products/sap-analytics-cloud/reviews/all | Crawls TrustRadius reviews for SAP Analytics Cloud, including review title, reviewer name, publication date, rating, pros, and cons. |  **50** |
 
 ### Notes
 

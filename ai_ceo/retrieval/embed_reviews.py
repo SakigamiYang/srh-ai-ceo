@@ -8,6 +8,7 @@ DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ai_ceo"
 engine = create_engine(DATABASE_URL)
 
 client = chromadb.HttpClient(host="localhost", port=8000)
+client.delete_collection("reviews")
 collection = client.get_or_create_collection("reviews")
 
 

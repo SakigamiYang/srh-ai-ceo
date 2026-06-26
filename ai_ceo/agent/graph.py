@@ -54,7 +54,7 @@ def retrieve_node(state: CEOState) -> CEOState:
         bm25_search=bm25_search,
         document_collection=document_collection,
         review_collection=review_collection,
-        top_k=5
+        top_k=10,
     )
 
     return {

@@ -5,6 +5,7 @@ from rank_bm25 import BM25Okapi
 from sqlalchemy import create_engine, text
 
 from ai_ceo.constants import PROJECT_ROOT
+from ai_ceo.retrieval.tokenization import lemmatize
 
 
 DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ai_ceo"
@@ -26,7 +27,7 @@ def main():
 
         for r in rows:
 
-            tokens = r["content"].split()
+            tokens = lemmatize(r["content"])
 
             docs.append(tokens)
             doc_ids.append(r["id"])

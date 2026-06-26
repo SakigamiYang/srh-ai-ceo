@@ -4,14 +4,16 @@ import re
 from loguru import logger
 from sqlalchemy import create_engine, text
 
+from ai_ceo.retrieval.tokenization import preprocess_text
+
 
 DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ai_ceo"
 
 engine = create_engine(DATABASE_URL)
 
 
-CHUNK_SIZE = 300
-OVERLAP = 100
+CHUNK_SIZE = 80  # word
+OVERLAP = 20  # word
 
 
 INSERT_CHUNK = text("""
@@ -39,12 +41,14 @@ def clean(text):
 
 
 def split_text(text):
+    tokens = preprocess_text(text)
+
     chunks = []
     start = 0
 
     while start < len(text):
         end = start + CHUNK_SIZE
-        chunk = text[start:end]
+        chunk = ' '.join(tokens[start:end])
         chunks.append(chunk)
 
         start += CHUNK_SIZE - OVERLAP
