@@ -10,6 +10,7 @@ from ai_ceo.retrieval.hybrid_search import hybrid_search
 from ai_ceo.retrieval.bm25_search import bm25_search
 
 from ai_ceo.intelligence.extract_intelligence import extract_intelligence
+from ai_ceo.intelligence.plan_route import plan_route
 from ai_ceo.agent.ceo_agent import ceo_decision
 
 
@@ -19,7 +20,9 @@ from ai_ceo.agent.ceo_agent import ceo_decision
 
 class CEOState(TypedDict, total=False):
     query: str
-    query_embedding: List[List[float]]
+
+    route: str
+    reason: str
 
     documents: List[Dict[str, Any]]
     reviews: List[Dict[str, Any]]
@@ -36,6 +39,27 @@ chroma_client = chromadb.HttpClient(host="localhost", port=8000)
 
 document_collection = chroma_client.get_collection("documents_chunks")
 review_collection = chroma_client.get_collection("reviews")
+
+
+# ========================
+# Node 0: Plan
+# ========================
+def plan_node(state: CEOState) -> CEOState:
+
+    result = plan_route(state["query"])
+
+    return {
+        "route": result.get("route", "retrieve"),
+        "reason": result.get("reason", "")
+    }
+
+
+def skip_retrieve_node(state: CEOState) -> CEOState:
+
+    return {
+        "documents": [],
+        "reviews": []
+    }
 
 
 # ========================
@@ -103,14 +127,30 @@ def build_graph():
     graph = StateGraph(CEOState)
 
     # nodes
+    graph.add_node("plan", plan_node)
     graph.add_node("retrieve", retrieve_node)
+    graph.add_node("skip", skip_retrieve_node)
     graph.add_node("intelligence", intelligence_node)
     graph.add_node("decision", decision_node)
 
     # flow
-    graph.set_entry_point("retrieve")
+    graph.set_entry_point("plan")
+
+    # conditional route
+    def route_decision(state: CEOState):
+        return state.get("route", "retrieve")
+
+    graph.add_conditional_edges(
+        "plan",
+        route_decision,
+        {
+            "retrieve": "retrieve",
+            "skip": "skip"
+        }
+    )
 
     graph.add_edge("retrieve", "intelligence")
+    graph.add_edge("skip", "intelligence")
     graph.add_edge("intelligence", "decision")
 
     graph.set_finish_point("decision")
